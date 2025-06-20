@@ -13,9 +13,24 @@
             </form>
         </div>
     </div>
-    <ul>
+
+    <div class="accordion mt-4" id="accordionExample">
         @foreach ($personajes as $personaje)
-            <li>{{ $personaje['name'] }} - {{ $personaje['status'] }}</li>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button {{ !$loop->first ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $personaje['id'] }}"
+                        aria-expanded="true" aria-controls="collapse{{ $personaje['id'] }}">
+                        {{ $personaje['id'] . ' ' . $personaje['name'] }}
+                    </button>
+                </h2>
+                <div id="collapse{{ $personaje['id'] }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p><strong>Status:</strong> {{ $personaje['status'] }}</p>
+                        <p><strong>Especie:</strong> {{ $personaje['species'] }}</p>
+                        <a href="{{ route('personajes.show', $personaje['id']) }}" class="btn btn-primary">Detalle</a>
+                    </div>
+                </div>
+            </div>
         @endforeach
-    </ul>
+    </div>
 @endsection
