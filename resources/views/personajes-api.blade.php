@@ -5,9 +5,12 @@
 @section('content')
     <div class="row mt-1">
         <div class="col-md-12 text-end">
-            <a href="{{ route('personajes.store') }}" class="btn btn-primary">
-                Almacenar Personajes
-            </a>
+            <form action="{{ route('personajes.store') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary">
+                    Almacenar Personajes
+                </button>
+            </form>
         </div>
     </div>
     <ul>

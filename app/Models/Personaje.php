@@ -15,8 +15,7 @@ class Personaje extends Model
         'species',
         'type',
         'gender',
-        'origin_name',
-        'origin_url',
+        'origin',
         'image',
     ];
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Personaje;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\DataTables;
 
@@ -31,7 +32,13 @@ class PersonajeController extends Controller
      */
     public function personajesData(Request $request){
         if($request->ajax()){
-            return DataTables::of(Personaje::query())->make(true);
+            $personajes = Personaje::query()
+                ->select([
+                    '*',
+                    DB::raw("DATE_FORMAT(created_at, '%d/%m/%Y') as fecha_formateada")
+                ])->get();
+
+            return DataTables::of($personajes)->make(true);
         }
     }
 
@@ -49,8 +56,7 @@ class PersonajeController extends Controller
                     'species' => $personaje['species'] ?? null,
                     'type' => $personaje['type'] ?? null,
                     'gender' => $personaje['gender'] ?? null,
-                    'origin_name' => $personaje['origin']['name'] ?? null,
-                    'origin_url' => $personaje['origin']['url'] ?? null,
+                    'origin' => $personaje['origin']['name'] ?? null,
                     'image' => $personaje['image'] ?? null,
                 ]
             );

@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('species')->nullable();
             $table->string('type')->nullable();
             $table->string('gender')->nullable();
-            $table->string('origin_name')->nullable();
-            $table->string('origin_url')->nullable();
+            $table->string('origin')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();
         });
