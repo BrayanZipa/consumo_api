@@ -27,7 +27,7 @@ Crear base de datos y configurar credenciales
 php artisan migrate
 o alternativamente ejecutar el script personajes.sql ubicado en la carpeta database (ya contiene la creación de la base de datos)
 
-# 7. Iniciar el servidor backend
+# 5. Iniciar el servidor backend
 php artisan serve
 
 ```
