@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Personaje;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Yajra\DataTables\DataTables;
 
 class PersonajeController extends Controller
 {
@@ -12,25 +14,49 @@ class PersonajeController extends Controller
      */
     public function index()
     {
-        $response = Http::get('https://rickandmortyapi.com/api/character');
-        dd($response->json());
-        return $response->json(); 
+        return view('personajes');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      */
-    public function create()
+    public function indexApiData()
     {
-        //
+        $personajes = $this->getPersonajes();
+        return view('personajes-api', compact('personajes'));
+    }
+
+    /**
+     * Obtener los registros de los personajes almacenados
+     */
+    public function personajesData(Request $request){
+        if($request->ajax()){
+            return DataTables::of(Personaje::query())->make(true);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        foreach ($this->getPersonajes() as $personaje) {
+            Personaje::updateOrCreate(
+                ['id' => $personaje['id']],
+                [
+                    'name' => $personaje['name'],
+                    'status' => $personaje['status'] ?? null,
+                    'species' => $personaje['species'] ?? null,
+                    'type' => $personaje['type'] ?? null,
+                    'gender' => $personaje['gender'] ?? null,
+                    'origin_name' => $personaje['origin']['name'] ?? null,
+                    'origin_url' => $personaje['origin']['url'] ?? null,
+                    'image' => $personaje['image'] ?? null,
+                ]
+            );
+        }
+
+        return redirect()->route('personajes.index');
     }
 
     /**
@@ -58,10 +84,24 @@ class PersonajeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Consulta api para traer la data dde los personajes
      */
-    public function destroy(string $id)
+    public function getPersonajes()
     {
-        //
+        $personajes = [];
+        $url = 'https://rickandmortyapi.com/api/character';
+        $limite = 100;
+
+        while ($url && count($personajes) < $limite) {
+            $response = Http::get($url);
+            if (!$response->successful()) break;
+
+            $data = $response->json();
+            $personajes = array_merge($personajes, $data['results']);
+            $url = $data['info']['next'] ?? null;
+        }
+
+        $personajes = array_slice($personajes, 0, $limite);
+        return $personajes;
     }
 }
