@@ -27,7 +27,7 @@
                     <div class="accordion-body">
                         <p><strong>Status:</strong> {{ $personaje['status'] }}</p>
                         <p><strong>Especie:</strong> {{ $personaje['species'] }}</p>
-                        <a href="{{ route('personajes.show', $personaje['id']) }}" class="btn btn-primary">Detalle</a>
+                        <a href="{{ route('personajes.show', $personaje['id']) }}" target="_blank" class="btn btn-primary">Detalle</a>
                     </div>
                 </div>
             </div>

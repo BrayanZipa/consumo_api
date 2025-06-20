@@ -68,9 +68,17 @@ class PersonajeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $response = Http::get("https://rickandmortyapi.com/api/character/{$id}");
+
+        if (!$response->successful()) {
+            abort(404, 'Personaje no encontrado');
+        }
+
+        $personaje = $response->json();
+
+        return view('personaje-detalle', compact('personaje'));
     }
 
     /**
