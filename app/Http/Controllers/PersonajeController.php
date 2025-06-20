@@ -76,17 +76,23 @@ class PersonajeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Personaje $personaje)
     {
-        //
+        return view('personaje-form', compact('personaje'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Personaje $personaje)
     {
-        //
+        $request->validate(['name' => ['required']], [
+            'name.required' => 'Este campo es requerido'
+        ]);
+
+       $personaje->update($request->all());
+
+        return redirect()->route('personajes.index')->with('success', 'Personaje actualizado correctamente');
     }
 
     /**
